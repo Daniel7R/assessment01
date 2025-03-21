@@ -1,0 +1,221 @@
+openapi: 3.0.1
+info:
+  title: StreamsMS API
+  version: v1
+paths:
+  /api/v1/platforms:
+    get:
+      tags:
+        - Platforms
+      summary: Get the available platforms for streams
+      operationId: GetPlatforms
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success
+  /api/v1/streams:
+    post:
+      tags:
+        - Streams
+      summary: Creates a stream for a valid match, before creating stream, it validates platform, user role for tournament and some other validations
+      operationId: CreateStreamForMatch
+      security:
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStreamRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/streams/{streamId}/url:
+    patch:
+      tags:
+        - Streams
+      summary: This method changes the url for a stream
+      operationId: ChangeUriStream
+      security:
+        - Bearer: []
+      parameters:
+        - name: streamId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeUrlRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/streams/viewer/join:
+    post:
+      tags:
+        - Streams
+      summary: This method allows a valid user join to a match stream
+      operationId: ViewerJoin
+      security:
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UseTicketRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/streams/participant/join:
+    post:
+      tags:
+        - Streams
+      summary: This method allows a valid user to join a tournament's match
+      operationId: ParticipantJoin
+      security:
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UseTicketRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/streams/{matchId}/viewers:
+    get:
+      tags:
+        - Streams
+      summary: Get the viewers count on a stream
+      operationId: GetViewersCount
+      security:
+        - Bearer: []
+      parameters:
+        - name: matchId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ViewersCountDTOResponseDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ViewersCountDTOResponseDTO'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ViewersCountDTOResponseDTO'
+  /api/v1/streams/kick:
+    post:
+      tags:
+        - Streams
+      summary: Remove user from stream(block to user and it would be through a signalR request)
+      operationId: KickUser
+      security:
+        - Bearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KickUserRequest'
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    ChangeUrlRequest:
+      type: object
+      properties:
+        newUrl:
+          type: string
+          format: uri
+          nullable: true
+      additionalProperties: false
+    CreateStreamRequest:
+      type: object
+      properties:
+        idPlatform:
+          type: integer
+          format: int32
+        streamUrl:
+          type: string
+          format: uri
+          nullable: true
+        idMatch:
+          type: integer
+          format: int32
+      additionalProperties: false
+    KickUserRequest:
+      type: object
+      properties:
+        idMatch:
+          type: integer
+          format: int32
+        idUser2Kick:
+          type: integer
+          format: int32
+      additionalProperties: false
+    TicketType:
+      enum:
+        - VIEWER
+        - PARTICIPANT
+      type: string
+    UseTicketRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Ticket code
+          nullable: true
+        idUser:
+          type: integer
+          description: Use who will be using ticket
+          format: int32
+        idMatch:
+          type: integer
+          description: Match where ticket is being used
+          format: int32
+        type:
+          $ref: '#/components/schemas/TicketType'
+      additionalProperties: false
+    ViewersCountDTO:
+      type: object
+      properties:
+        matchId:
+          type: integer
+          format: int32
+        viewers:
+          type: integer
+          format: int32
+      additionalProperties: false
+    ViewersCountDTOResponseDTO:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/ViewersCountDTO'
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: 'JWT: Bearer {token}'
+      scheme: Bearer

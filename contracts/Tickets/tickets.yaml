@@ -1,0 +1,128 @@
+openapi: 3.0.1
+info:
+  title: TicketsMS API
+  version: v1
+paths:
+  /api/v1/tickets:
+    get:
+      tags:
+        - Ticket
+      summary: Get tickets by id tournament
+      operationId: GetTickets
+      security:
+        - Bearer: []
+      parameters:
+        - name: idTournament
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketParticipantResponseDTOListResponseDTO'
+  /api/v1/tickets/use:
+    post:
+      tags:
+        - Ticket
+      summary: This method is in charge to use a ticket for a event
+      operationId: UseTicket
+      security:
+        - apiKeyAuth: []
+      parameters:
+        - name: x-api-key
+          in: header
+          description: api key header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UseTicketRequest'
+      responses:
+        '200':
+          description: Success
+  /api/v1/tickets/{userId}:
+    get:
+      tags:
+        - Ticket
+      summary: Get tickets participant by userid
+      operationId: GetTicketsUser
+      security:
+        - Bearer: []
+      parameters:
+        - name: userId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    TicketParticipantResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        idTournament:
+          type: integer
+          format: int32
+        type:
+          $ref: '#/components/schemas/TicketType'
+      additionalProperties: false
+    TicketParticipantResponseDTOListResponseDTO:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/TicketParticipantResponseDTO'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    TicketType:
+      enum:
+        - VIEWER
+        - PARTICIPANT
+      type: string
+    UseTicketRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Ticket code
+          nullable: true
+        idUser:
+          type: integer
+          description: Use who will be using ticket
+          format: int32
+        idMatch:
+          type: integer
+          description: Match where ticket is being used
+          format: int32
+        type:
+          $ref: '#/components/schemas/TicketType'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: 'JWT: Bearer {token}'
+      scheme: Bearer
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key

@@ -1,0 +1,681 @@
+openapi: 3.0.1
+info:
+  title: TournamentManagementMS API
+  version: v1
+paths:
+  /api/v1/categories:
+    get:
+      tags:
+        - Category
+      summary: Get the system available categories
+      operationId: GetCategories
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: Success
+  /api/v1/games:
+    get:
+      tags:
+        - Game
+      summary: Get the system available games
+      security:
+        - Bearer: []
+      operationId: GetGames
+      responses:
+        '200':
+          description: Success
+  /api/v1/matches:
+    post:
+      tags:
+        - Matches
+      operationId: CreateMatch
+      security:
+        - Bearer: []
+      summary: "This method creates a tournament match\r\nAssign team to the match"
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMatchesRequestDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchesResponseDTOResponseDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectResponseDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    get:
+      tags:
+        - Matches
+      summary: Set the match winner and change status to finish
+      parameters:
+        - name: idTournament
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+  /api/v1/matches/winner:
+    patch:
+      tags:
+        - Matches
+      operationId: SetWinnerMatch
+      security:
+        - Bearer: []
+      summary: Set the match winner and change status to finish
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchWinnerDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BooleanResponseDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BooleanNullableResponseDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BooleanNullableResponseDTO'
+  /api/v1/matches/date:
+    patch:
+      tags:
+        - Matches
+      operationId: ChangeDateMatch
+      security:
+        - Bearer: []
+      summary: Change the match date if provided date and math are valid, and user has enough permissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeMatchhDate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringResponseDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectResponseDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/v1/teams:
+    get:
+      tags:
+        - Teams
+      summary: Returns basic info about teams, such as teams names, and team members in a tournament
+      operationId: GetTeamsByIdTournament
+      security:
+        - Bearer: []
+      parameters:
+        - name: idTournament
+          in: query
+          description: ''
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamsTournamentResponseIEnumerableResponseDTO'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamsTournamentResponseIEnumerableResponseDTO'
+  /api/v1/tournaments:
+    post:
+      tags:
+        - Tournament
+      summary: Creates a new tournament in system, if free, it validates, that a user can't create more than one free tournament
+      operationId: CreateTournament
+      security:
+        - Bearer: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTournamentRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentResponseDTOResponseDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectResponseDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+    get:
+      tags:
+        - Tournament
+      summary: Get the available tournaments according the provided statuses
+      operationId: GetTournaments
+      parameters:
+        - name: statuses
+          in: query
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/TournamentStatus'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FullTournamentResponseResponseDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FullTournamentResponseResponseDTO'
+  /api/v1/tournaments/{idTournament}/date:
+    patch:
+      tags:
+        - Tournament
+      summary: Change the tournament dates, remember, date must be higher than request date
+      operationId: ChangeDate
+      security:
+        - Bearer: []
+      parameters:
+        - name: idTournament
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeDatesRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringResponseDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StringResponseDTO'
+  /api/v1/tournaments/{idTournament}/status:
+    patch:
+      tags:
+        - Tournament
+      summary: Change the tournament status to a new valid Status from the system
+      operationId: ChangeTournamentStatus
+      security:
+        - Bearer: []
+      parameters:
+        - name: idTournament
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeTournamentStatus'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BooleanNullableResponseDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BooleanNullableResponseDTO'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BooleanNullableResponseDTO'
+  /api/v1/role/subadmin:
+    post:
+      tags:
+        - Tournament
+      operationId: addSubadmin
+      security:
+        - Bearer: []
+      summary: Add a new subadmin to tournament, to help admin manage tournament and events(can't be more then 2 subadmins by tournament)
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubadminRequest'
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    BooleanNullableResponseDTO:
+      type: object
+      properties:
+        result:
+          type: boolean
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BooleanResponseDTO:
+      type: object
+      properties:
+        result:
+          type: boolean
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ChangeDatesRequest:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+      additionalProperties: false
+    ChangeMatchhDate:
+      type: object
+      properties:
+        idMatch:
+          type: integer
+          format: int32
+        date:
+          type: string
+          format: date-time
+      additionalProperties: false
+    ChangeTournamentStatus:
+      type: object
+      properties:
+        newStatus:
+          $ref: '#/components/schemas/TournamentStatus'
+      additionalProperties: false
+    CreateMatchesRequestDTO:
+      type: object
+      properties:
+        idTournament:
+          type: integer
+          format: int32
+        idStream:
+          type: integer
+          format: int32
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        matchDate:
+          type: string
+          format: date-time
+        idTeams:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+      additionalProperties: false
+    CreatePrizeDTO:
+      type: object
+      properties:
+        description:
+          type: string
+          nullable: true
+        total:
+          type: number
+          format: double
+      additionalProperties: false
+    CreateSubadminRequest:
+      type: object
+      properties:
+        idUser:
+          type: integer
+          format: int32
+        idTournament:
+          type: integer
+          format: int32
+      additionalProperties: false
+    CreateTournamentRequest:
+      required:
+        - description
+        - endDate
+        - idCategory
+        - idGame
+        - isFree
+        - name
+        - prize
+        - startDate
+      type: object
+      properties:
+        name:
+          maxLength: 255
+          minLength: 1
+          type: string
+        description:
+          minLength: 1
+          type: string
+        idCategory:
+          type: integer
+          format: int32
+        idGame:
+          type: integer
+          format: int32
+        isFree:
+          type: boolean
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        prize:
+          $ref: '#/components/schemas/CreatePrizeDTO'
+      additionalProperties: false
+    FullTournamentResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        categoryName:
+          type: string
+          nullable: true
+        prizeDescription:
+          type: string
+          nullable: true
+        maxPlayers:
+          type: integer
+          format: int32
+        totalPrize:
+          type: number
+          format: double
+        gameName:
+          type: string
+          nullable: true
+        isFree:
+          type: boolean
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+      additionalProperties: false
+    FullTournamentResponseResponseDTO:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/FullTournamentResponse'
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    MatchStatus:
+      enum:
+        - PENDING
+        - ONGOING
+        - FINISHED
+        - UNKNOWN
+        - CANCELED
+      type: string
+    MatchWinnerDTO:
+      type: object
+      properties:
+        idWinner:
+          type: integer
+          format: int32
+          nullable: true
+        idMatch:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    MatchesResponseDTO:
+      type: object
+      properties:
+        idMatch:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        date:
+          type: string
+          format: date-time
+        matchStatus:
+          $ref: '#/components/schemas/MatchStatus'
+      additionalProperties: false
+    MatchesResponseDTOResponseDTO:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/MatchesResponseDTO'
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ObjectResponseDTO:
+      type: object
+      properties:
+        result:
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+      additionalProperties: {}
+    StringResponseDTO:
+      type: object
+      properties:
+        result:
+          type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    TeamsTournamentResponse:
+      type: object
+      properties:
+        idTournament:
+          type: integer
+          format: int32
+        idTeam:
+          type: integer
+          format: int32
+        teamName:
+          type: string
+          nullable: true
+        maxMembers:
+          type: integer
+          format: int32
+        currentMembers:
+          type: integer
+          format: int32
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserInfo'
+          nullable: true
+      additionalProperties: false
+    TeamsTournamentResponseIEnumerableResponseDTO:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamsTournamentResponse'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    TournamentResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        categoryName:
+          type: string
+          nullable: true
+        gameName:
+          type: string
+          nullable: true
+        maxPlayers:
+          type: integer
+          format: int32
+        isFree:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+      additionalProperties: false
+    TournamentResponseDTOResponseDTO:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/TournamentResponseDTO'
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    TournamentStatus:
+      enum:
+        - PENDING
+        - ONGOING
+        - FINISHED
+        - CANCELED
+      type: string
+    UserInfo:
+      type: object
+      properties:
+        idUser:
+          type: integer
+          format: int32
+        username:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: http
+      description: 'JWT: Bearer {token}'
+      scheme: Bearer

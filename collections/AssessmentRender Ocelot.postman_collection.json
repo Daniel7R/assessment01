@@ -1,0 +1,1214 @@
+{
+	"info": {
+		"_postman_id": "d6f881d0-c050-4017-a9c8-bf1dc5cea938",
+		"name": "AssessmentRender Ocelot",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13496786"
+	},
+	"item": [
+		{
+			"name": "UsersAuth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"pepito@gmail.com\",\r\n  \"password\": \"Carlos123*\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/auth/login",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Carlos Rivera\",\r\n  \"email\": \"carlos.riverara3@amigo.edu.co\",\r\n  \"password\": \"Carlos123*\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/auth/register",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Aca se encuentran las operaciones para registro y autenticacion de usuarios, con el que por medio de la autenticacion se genera el jwt para autorizacion del usuario"
+		},
+		{
+			"name": "Tournaments",
+			"item": [
+				{
+					"name": "tournament",
+					"item": [
+						{
+							"name": "subadmin",
+							"item": [
+								{
+									"name": "CreateSubAdmin",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{JWT_ADMIN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"idUser\": 1,\r\n  \"idTournament\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{BASE_URI}}/api/v1/role/subadmin",
+											"host": [
+												"{{BASE_URI}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"role",
+												"subadmin"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Create tournament",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{JWT_ADMIN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Need For Speed LEGENDS\",\n    \"description\": \"This is the Need For Speed tournament\",\n    \"idCategory\": 1,\n    \"idGame\": 1,\n    \"isFree\": true,\n    \"startDate\": \"2025-03-29T00:27:00.128Z\",\n    \"endDate\": \"2025-03-29T00:28:00.128Z\",\n    \"prize\": {\n        \"description\": \"this is the prize\",\n        \"total\": 100000\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/api/v1/tournaments",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"tournaments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ChangeDatesTournament",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{JWT_ADMIN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"startDate\": \"2025-03-20T22:17:00.128Z\",\n  \"endDate\": \"2025-03-29T00:28:00.128Z\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/api/v1/tournaments/1/date",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"tournaments",
+										"1",
+										"date"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ChangeStatusTournament",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{JWT_ADMIN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "accept",
+										"value": "*/*"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"newStatus\": \"PENDING\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/api/v1/tournaments/2/status",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"tournaments",
+										"2",
+										"status"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetByStatuses",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URI}}/api/v1/tournaments?statuses=ONGOING&statuses=PENDING",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"tournaments"
+									],
+									"query": [
+										{
+											"key": "statuses",
+											"value": "ONGOING"
+										},
+										{
+											"key": "statuses",
+											"value": "PENDING"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "match",
+					"item": [
+						{
+							"name": "CreateMatchTournament",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{JWT_NO_ADMIN2}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idTournament\": 1,\r\n  \"name\": \"match tournament 1\",\r\n  \"matchDate\": \"2025-03-29T00:27:30.128Z\",\r\n  \"idTeams\": [\r\n   1,2,3\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/api/v1/matches",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"matches"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateMatchDate",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{JWT_ADMIN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idMatch\": 2,\r\n  \"date\": \"2025-03-24T23:46:32.841Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/api/v1/matches/date",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"matches",
+										"date"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "SetWinnerMatch",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idWinner\": 13,\r\n  \"idMatch\": 3\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URI}}/api/v1/matches/winner",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"matches",
+										"winner"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetMatchesTournament",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URI}}/api/v1/matches?idTournament=1",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"matches"
+									],
+									"query": [
+										{
+											"key": "idTournament",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "teams",
+					"item": [
+						{
+							"name": "GetTeamsByIdTournament",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URI}}/api/v1/teams?idTournament=1",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"teams"
+									],
+									"query": [
+										{
+											"key": "idTournament",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "category",
+					"item": [
+						{
+							"name": "getCategories",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{JWT_ADMIN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URI}}/api/v1/categories",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"categories"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "games",
+					"item": [
+						{
+							"name": "getGames",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{JWT_ADMIN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URI}}/api/v1/games",
+									"host": [
+										"{{BASE_URI}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"games"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"description": "Aca se encuentran todos los endpoints asociados a la gestionde torneos, como el tema de torneos(tournaments), partidos(match), equipos(teams), categorias(category) y juegos(games)"
+		},
+		{
+			"name": "Tickets",
+			"item": [
+				{
+					"name": "GetAvailableTicketsByTournamentId",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_ADMIN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/tickets?idTournament=1",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tickets"
+							],
+							"query": [
+								{
+									"key": "idTournament",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAvailableTicketsByUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_NO_ADMIN1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/tickets/4",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tickets",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UseTicket",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "content",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"aaaa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/tickets/use",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tickets",
+								"use"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "SessionSaleParticipantFreeTournament",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_NO_ADMIN1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"sessionUrl\": \"\",\r\n  \"sessionId\": \"\",\r\n    \"approvedUrl\": \"https://example.com/approved\",\r\n  \"cancelUrl\": \"https://example.com/cancel\",\r\n  \"details\": {\r\n    \"idTicket\": 84,\r\n    \"idTournament\": 1\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/transactions/participant/sale",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"participant",
+								"sale"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SessionSaleParticipantPaidTournament",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhcmxvc3JpdmVyYXJhbmdlbDdAZ21haWwuY29tIiwic3ViIjoiMiIsIm5hbWUiOiJjYXJsb3Mgcml2ZXJhIiwibmJmIjoxNzQxMzg0OTI2LCJleHAiOjE3NDE5NzE3MjYsImlhdCI6MTc0MTM2NjkyNiwiaXNzIjoiZS1zcG9ydHMtYXV0aC1hcGkiLCJhdWQiOiJlLXNwb3J0cy1jbGllbnQifQ.hIgG6bek1_-yUzhR7zqgRtV5Razl3Y0AHxgIz0rdXfg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"sessionUrl\": \"\",\r\n  \"sessionId\": \"\",\r\n    \"approvedUrl\": \"https://example.com/approved\",\r\n  \"cancelUrl\": \"https://example.com/cancel\",\r\n  \"details\": {\r\n    //MANDATORY\r\n    \"idTicket\": 21,\r\n    //MANDATORY\r\n    \"idTournament\":3\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/transactions/participant/sale",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"participant",
+								"sale"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SessionSaleViewer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_NO_ADMIN1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sessionUrl\": \"\",\r\n    \"sessionId\": \"\",\r\n    \"approvedUrl\": \"https://example.com/approved\",\r\n    \"cancelUrl\": \"https://example.com/cancel\",\r\n    \"idMatch\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/transactions/viewer/sale",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"viewer",
+								"sale"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SessionDonation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_ADMIN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"sessionUrl\": \"\",\r\n  \"sessionId\": \"\",\r\n  \"approvedUrl\": \"https://example.com/approved\",\r\n  \"cancelUrl\": \"https://example.com/cancel\",\r\n  \"idTournament\": 0,\r\n  \"amount\": 16000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/transactions/donation",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"donation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "validate status donation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_NO_ADMIN1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"sessionId\": \"cs_test_a1IoLYKzI7ViRlsqVk5cxVWkIvUq3dVljq4hBX8LtHJmHqIa8XIkp3DCw3\",\r\n  \"transactionType\": \"DONATION\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/transactions/status",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "StatusSaleFreeParticipant",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_NO_ADMIN1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"sessionId\": \"cs_test_a1kdHJz2U03u2ebkRcn9PXsKDE5XZisiAIWbkgFmAHyH7ZKZyfcyVS2KRq\",\r\n  \"transactionType\": \"SALE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/transactions/status",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "StatusSalePaidParticipant",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_no_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"sessionId\": \"cs_test_a1RKbiz04k2Z9TuekIONb3B9TLBsEw1RBXJlbY9A8RV9LijPVZUUB2QfUa\",\r\n  \"transactionType\": \"SALE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/transactions/status",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "StatusSaleViewer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_ADMIN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"sessionId\": \"cs_test_a1yDJqKpHIttyquUJHmo4Blijl9Mg55mHHJB9MPdE9Vu9J59h6v9HV2MId\",\r\n  \"transactionType\": \"SALE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/transactions/status",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "streams",
+			"item": [
+				{
+					"name": "CreateStream",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_NO_ADMIN2}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idPlatform\": 3,\r\n  \"streamUrl\": \"http://string.com\",\r\n  \"idMatch\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/streams",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"streams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ChangeUriStream",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"newUrl\": \"http://string2.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/streams/2/url",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"streams",
+								"2",
+								"url"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ParticipantJoin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_NO_ADMIN1}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"code\": \"TKT-20250319225408-YZ0594\",\r\n  \"idMatch\": 2,\r\n  \"type\": \"PARTICIPANT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/streams/participant/join",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"streams",
+								"participant",
+								"join"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ViewerJoin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_no_admin2}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"code\": \"string\",\r\n  \"idMatch\": 4,\r\n  \"type\": \"VIEWER\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/streams/viewer/join",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"streams",
+								"viewer",
+								"join"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetViewersMatch",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_ADMIN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/streams/1/viewers",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"streams",
+								"1",
+								"viewers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "kickUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_admin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idMatch\": 5,\r\n  \"idUser2Kick\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URI}}/api/v1/streams/kick",
+							"host": [
+								"{{BASE_URI}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"streams",
+								"kick"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Aca se encuentran todos los endpoints asociados al ms de transacciones/pagos, para realizar la compra de tickets tanto para espectadores como para participantes de los eventos de los torneos, ademas, de realizacion de donaciones"
+		}
+	]
+}

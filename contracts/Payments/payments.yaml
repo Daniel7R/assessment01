@@ -1,0 +1,317 @@
+openapi: 3.0.1
+info:
+  title: PaymentsMS API
+  version: v1
+paths:
+  /api/v1/transactions/participant/sale:
+    post:
+      tags:
+        - Transactions
+      summary: Creates a participant sale transaction on Stripe
+      operationId: SaleParticipant
+      security:
+        - Bearer: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleParticipantRequestDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StripeRequestDTOResponseDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StripeRequestDTOResponseDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/v1/transactions/viewer/sale:
+    post:
+      tags:
+        - Transactions
+      summary: Creates a viewer sale transaction on Stripe
+      operationId: ViewerSale
+      security:
+        - Bearer: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleViewerRequestDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StripeRequestDTOResponseDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StripeRequestDTOResponseDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/v1/transactions/donation:
+    post:
+      tags:
+        - Transactions
+      summary: Create a donation transaction
+      operationId: Donation
+      security:
+        - Bearer: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonationsRequestDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StripeRequestDTOResponseDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StripeRequestDTOResponseDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/v1/transactions/status:
+    post:
+      tags:
+        - Transactions
+      summary: Validates the transaction status, for creating confirmation on transactions db
+      operationId: TransactionStatus
+      security:
+        - Bearer: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionStatusRequestDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusTransactionDTOResponseDTO'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusTransactionDTOResponseDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+components:
+  schemas:
+    DonationsRequestDTO:
+      type: object
+      properties:
+        sessionUrl:
+          type: string
+          description: Url for stripe session
+          nullable: true
+        sessionId:
+          type: string
+          description: This attribute is used to create a stripe session
+          nullable: true
+        approvedUrl:
+          type: string
+          description: Approved url when a transaction was successfull
+          nullable: true
+        cancelUrl:
+          type: string
+          description: Cancel url when a transaction is cancelled or rejected
+          nullable: true
+        idTournament:
+          type: integer
+          format: int32
+        amount:
+          type: number
+          format: double
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+      additionalProperties: {}
+    SaleParticipantDetailsDTO:
+      type: object
+      properties:
+        idTicket:
+          type: integer
+          format: int32
+        idTournament:
+          type: integer
+          format: int32
+      additionalProperties: false
+    SaleParticipantRequestDTO:
+      type: object
+      properties:
+        sessionUrl:
+          type: string
+          description: Url for stripe session
+          nullable: true
+        sessionId:
+          type: string
+          description: This attribute is used to create a stripe session
+          nullable: true
+        approvedUrl:
+          type: string
+          description: Approved url when a transaction was successfull
+          nullable: true
+        cancelUrl:
+          type: string
+          description: Cancel url when a transaction is cancelled or rejected
+          nullable: true
+        details:
+          $ref: '#/components/schemas/SaleParticipantDetailsDTO'
+      additionalProperties: false
+    SaleViewerRequestDTO:
+      type: object
+      properties:
+        sessionUrl:
+          type: string
+          description: Url for stripe session
+          nullable: true
+        sessionId:
+          type: string
+          description: This attribute is used to create a stripe session
+          nullable: true
+        approvedUrl:
+          type: string
+          description: Approved url when a transaction was successfull
+          nullable: true
+        cancelUrl:
+          type: string
+          description: Cancel url when a transaction is cancelled or rejected
+          nullable: true
+        idMatch:
+          type: integer
+          format: int32
+      additionalProperties: false
+    StatusTransactionDTO:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          nullable: true
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+      additionalProperties: false
+    StatusTransactionDTOResponseDTO:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/StatusTransactionDTO'
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    StripeRequestDTO:
+      type: object
+      properties:
+        sessionUrl:
+          type: string
+          description: Url for stripe session
+          nullable: true
+        sessionId:
+          type: string
+          description: This attribute is used to create a stripe session
+          nullable: true
+        approvedUrl:
+          type: string
+          description: Approved url when a transaction was successfull
+          nullable: true
+        cancelUrl:
+          type: string
+          description: Cancel url when a transaction is cancelled or rejected
+          nullable: true
+      additionalProperties: false
+      description: This dto is used to create a payment, transaction, donation, etc.
+    StripeRequestDTOResponseDTO:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/StripeRequestDTO'
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    TransactionStatus:
+      enum:
+        - pending
+        - canceled
+        - failed
+        - succeeded
+      type: string
+    TransactionStatusRequestDTO:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          nullable: true
+        idUser:
+          type: integer
+          format: int32
+        transactionType:
+          $ref: '#/components/schemas/TransactionType'
+      additionalProperties: false
+    TransactionType:
+      enum:
+        - SALE
+        - DONATION
+      type: string
+  securitySchemes:
+    Bearer:
+      type: http
+      description: 'JWT: Bearer {token}'
+      scheme: Bearer
